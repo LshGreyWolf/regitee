@@ -10,11 +10,14 @@ import com.sun.xml.internal.bind.v2.runtime.output.UTF8XmlOutput;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.rmi.ConnectIOException;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 @RestController
@@ -23,6 +26,8 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class UserController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     /**
      * 手机验证码的短信
@@ -39,7 +44,11 @@ public class UserController {
             //调用阿里的短信服务
             //SMSUtils.sendMessage("reggie","","",phone,code);
             //将验证码保存到session中
-            session.setAttribute(phone,code);
+//            session.setAttribute(phone,code);
+
+
+            //将验证码缓存到redis中，并设设置有效期
+            redisTemplate.opsForValue().set(phone, code,5, TimeUnit.MINUTES);
             return  R.success("手机验证码发送成功");
         }
         return  R.success("手机验证码发送失败");
@@ -53,7 +62,9 @@ public class UserController {
         //获取验证码
         String code = map.get("code").toString();
         //session获取保存的验证码
-        Object sessionCode = session.getAttribute(phone);
+//        Object sessionCode = session.getAttribute(phone);
+        //从redis中获取验证码
+        Object sessionCode= redisTemplate.opsForValue().get(phone);
         //进行验证码的比对  页面提交的验证码和session保存的验证码
         if (sessionCode!=null &&sessionCode.equals(code)){
             //比对成功，登录成功
@@ -70,6 +81,8 @@ public class UserController {
             }
             //登录成功将用户的id存到服务端  否则过滤器那边过不去，登陆不成功
             session.setAttribute("user",user.getId());
+            //如果用户登录成功 ，删除redis中缓存的验证码
+            redisTemplate.delete(phone);
             return R.success(user);
         }
 
