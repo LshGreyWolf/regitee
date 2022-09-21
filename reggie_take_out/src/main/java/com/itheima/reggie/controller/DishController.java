@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -126,42 +127,46 @@ public class DishController {
         return R.success(list);
     }
      */
-
+    /**
+     * 根据条件查询对应条件的菜品数据  用于增加套餐时，添加菜品的数据的显示
+     * @param dish
+     * @return
+     */
     @GetMapping("/list")
-    public R<List<DishDto>> list(Dish dish) {
+    public R<List<Dish>> list(Dish dish) {
         LambdaQueryWrapper<Dish> lambdaQueryWrapper = new LambdaQueryWrapper();
         lambdaQueryWrapper.eq(dish.getCategoryId() != null, Dish::getCategoryId, dish.getCategoryId());
         //添加条件，只查询在售菜品
         lambdaQueryWrapper.eq(Dish::getStatus, 1);
         //添加排序条件
         lambdaQueryWrapper.orderByAsc(Dish::getSort).orderByDesc(Dish::getUpdateTime);
+        //查询出在售菜品且根据菜品的分类查出来的菜品
         List<Dish> list = dishService.list(lambdaQueryWrapper);
-        List<DishDto> listDto = list.stream().map((item) -> {
-            DishDto dishDto = new DishDto();
-            BeanUtils.copyProperties(item, dishDto);
-            Long categoryId = item.getCategoryId();
-            //根据id分类查询对象
-            Category category = categoryService.getById(categoryId);
-            if (category != null) {
-                String categoryName = category.getName();
-                dishDto.setCategoryName(categoryName);
-            }
-            //当前菜品id
-            Long dishId = item.getId();
-            LambdaQueryWrapper<DishFlavor> FlavorLqw = new LambdaQueryWrapper<DishFlavor>()
-                                                        .eq(DishFlavor::getDishId, dishId);
-            //根据菜品id查找对应的口味
-            List<DishFlavor> dishFlavors = dishFlavorService.list(FlavorLqw);
-            //将口味信息设置到里面
-            dishDto.setFlavors(dishFlavors);
-            return dishDto;
-        }).collect(Collectors.toList());
-        return R.success(listDto);
+//        List<DishDto> listDto = list.stream().map((item) -> {
+//            DishDto dishDto = new DishDto();
+//            BeanUtils.copyProperties(item, dishDto);
+//            Long categoryId = item.getCategoryId();
+//            //根据id分类查询对象
+//            Category category = categoryService.getById(categoryId);
+//            if (category != null) {
+//                String categoryName = category.getName();
+//                dishDto.setCategoryName(categoryName);
+//            }
+//            //当前菜品id
+//            Long dishId = item.getId();
+//            LambdaQueryWrapper<DishFlavor> FlavorLqw = new LambdaQueryWrapper<DishFlavor>()
+//                                                        .eq(DishFlavor::getDishId, dishId);
+//            //根据菜品id查找对应的口味
+//            List<DishFlavor> dishFlavors = dishFlavorService.list(FlavorLqw);
+//            //将口味信息设置到里面
+//            dishDto.setFlavors(dishFlavors);
+//            return dishDto;
+//        }).collect(Collectors.toList());
+        return R.success(list);
     }
 
     /**
      * 删除菜品
-     *
      * @param ids
      * @return
      */

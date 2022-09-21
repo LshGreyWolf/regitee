@@ -44,7 +44,7 @@ public class DishServiceImpl extends ServiceImpl<DishMapper, Dish> implements Di
         //保存菜品的基本信息到Dish表
         this.save(dishDto);
         Long dishId = dishDto.getId(); //菜品id
-        //保存到dish_favor  前端传过来的数据在Dis h++++_flavor表中只有name，value字段，并没有dish_id，所以要获取dish_id
+        //保存到dish_favor  前端传过来的数据在Dish_flavor表中只有name，value字段，并没有dish_id，所以要获取dish_id
         List<DishFlavor> flavors = dishDto.getFlavors();
         flavors = flavors.stream().map((item) -> {
             item.setDishId(dishId);

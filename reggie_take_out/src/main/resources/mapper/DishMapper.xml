@@ -1,0 +1,12 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.itheima.reggie.mapper.DishMapper">
+
+
+<!--    <insert id="saveWithFlavor" parameterType="com.itheima.reggie.dto.DishDto">-->
+
+
+<!--    </insert>-->
+</mapper>

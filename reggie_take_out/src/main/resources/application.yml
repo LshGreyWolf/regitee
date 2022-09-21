@@ -18,5 +18,6 @@ mybatis-plus:
   global-config:
     db-config:
       id-type: ASSIGN_ID
+  mapper-locations: classpath*:mapper/*Mapper.xml
 reggie:
   path: D:\img\

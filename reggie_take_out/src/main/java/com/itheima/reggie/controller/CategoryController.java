@@ -59,13 +59,18 @@ public class CategoryController {
      * @return
      */
     @DeleteMapping
-    public R<String> delete(Long ids) {
+    public R<String> delete(@RequestParam Long ids) {
         log.info("删除分类,id为:{}", ids);
 //        categoryService.removeById(ids);
         categoryService.remove(ids);
         return R.success("分类信息删除成功");
     }
 
+    /**
+     * 修改分类信息
+     * @param category
+     * @return
+     */
     @PutMapping
     public R<String> update(@RequestBody Category category) {
         log.info("修改信息分类为 :{}", category);
