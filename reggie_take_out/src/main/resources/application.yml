@@ -6,6 +6,9 @@ spring:
     port: 6379
     #password: 123
     database: 0
+  cache:
+    redis:
+      time-to-live: 180000   #缓存的过期时间
   application:
     #应用的名称
     name: reggie_take_out
