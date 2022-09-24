@@ -13,6 +13,7 @@ import com.itheima.reggie.servive.CategoryService;
 import com.itheima.reggie.servive.DishService;
 import com.itheima.reggie.servive.SetmealDishService;
 import com.itheima.reggie.servive.SetmealService;
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/setmeal")
 @Slf4j
+@Api(tags = "套餐相关接口")
 public class SetmealController {
     @Autowired
     private SetmealService setmealService;

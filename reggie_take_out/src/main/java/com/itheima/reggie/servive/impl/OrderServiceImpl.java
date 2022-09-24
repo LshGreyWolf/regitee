@@ -41,16 +41,16 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Orders> implement
     public void submit(Orders orders) {
 
         //获取当前用户id
-        Long currentId = BaseContext.getCurrentId();
+        Long userId = BaseContext.getCurrentId();
         //查询当前用户购物车的数据
         LambdaQueryWrapper<ShoppingCart> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(ShoppingCart::getUserId, currentId);
+        queryWrapper.eq(ShoppingCart::getUserId, userId);
         List<ShoppingCart> shoppingCarts = shoppingCartService.list(queryWrapper);
         if (shoppingCarts == null || shoppingCarts.size() == 0) {
             throw new CustomException("购物车为空，无法下单");
         }
         //查询用户数据
-        User user = userService.getById(currentId);
+        User user = userService.getById(userId);
         //查询地址数据   前端给后端传入的数据中有 addressBookId   但是后端拿orders实体类接收的，所以从改实体类中来获取 addressBookId
         Long addressBookId = orders.getAddressBookId();
         AddressBook addressBook = addressBookService.getById(addressBookId);
@@ -88,8 +88,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Orders> implement
         orders.setStatus(2);
         //订单的总金额
         orders.setAmount(new BigDecimal(amount.get()));
-        orders.setUserId(currentId);
-        orders.setUserName(user.getName());
+        orders.setUserId(userId);
+//        orders.setUserName(user.getName());
         orders.setConsignee(addressBook.getConsignee());
         orders.setPhone(addressBook.getPhone());
         orders.setAddress((addressBook.getProvinceName() == null ? "" : addressBook.getProvinceName())

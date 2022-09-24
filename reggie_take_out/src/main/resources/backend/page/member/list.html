@@ -130,9 +130,11 @@
           this.user = JSON.parse(localStorage.getItem('userInfo')).username
         },
         mounted() {
+          console.log(333)
         },
         methods: {
           async init () {
+            console.log(444)
             const params = {
               page: this.page,
               pageSize: this.pageSize,

@@ -21,6 +21,16 @@
   margin-top: 10rem;
   position: relative;
 }
+#login .divContainer2 {
+  width: 356rem;
+  height: 64rem;
+  opacity: 1;
+  background: #ffffff;
+  border-radius: 6rem;
+  margin: 0 auto;
+  margin-top: 10rem;
+  position: relative;
+}
 
 #login .divContainer input {
   border: 0;

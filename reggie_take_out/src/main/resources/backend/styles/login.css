@@ -79,11 +79,13 @@
   font-weight: 500;
   font-size: 14px;
   border: 0;
-  background-color: #ffc200;
+  background-color: #E74C3C ;
+
+  transition: all .5s;
 }
 .login-btn:hover,
 .login-btn:focus {
-  /* background: #FFC200; */
+   background: #B03A2E;
   /* color: #ffffff; */
 }
 .login-form-title {
